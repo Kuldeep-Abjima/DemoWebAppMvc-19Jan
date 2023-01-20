@@ -3,10 +3,9 @@
     public enum ClubCategory
     {
       RoadRunner,
-      Womens,
-      City,
+      darkracer,
+      Attack,
       Trail,
       Endurance
-
     }
 }
