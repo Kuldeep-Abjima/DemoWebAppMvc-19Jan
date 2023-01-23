@@ -35,11 +35,16 @@ namespace DemoWebAppMvc.Repository
 
             public async Task<Race> GetByIdAsync(int id)
             {
-                var race = _context.Races.Include(c=> c.Address).FirstOrDefaultAsync(x => x.Id == id);
-                return await race;
+                var race = await _context.Races.Include(c=> c.Address).FirstOrDefaultAsync(x => x.Id == id);
+                return race;
+            }
+            public async Task<Race> GetByIdAsyncNoTracking(int id)
+            {
+            var race = await _context.Races.Include(c => c.Address).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return race;
             }
 
-            public async Task<IEnumerable<Race>> GetRacesByCity(string city)
+        public async Task<IEnumerable<Race>> GetRacesByCity(string city)
             {
                 return await _context.Races.Where(x => x.Address.City.Contains(city)).ToListAsync();
             }
@@ -55,5 +60,7 @@ namespace DemoWebAppMvc.Repository
                _context.Update(race);  
                return Save();
             }
+
+                
         }
     }

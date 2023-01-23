@@ -1,11 +1,12 @@
 ﻿@using DemoWebAppMvc.Data.ENum;
-@model Club
+@using DemoWebAppMvc.ViewModels;
+@model CreateClubViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-<form method="Post" asp-action="Create">
+<form method="Post" asp-action="Create" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Title">Title</label>
         <input asp-for="Title" class="form-control" placeholder="Enter Club Title">
@@ -15,11 +16,6 @@
         <label asp-for="Description">Discription</label>
         <input asp-for="Description" class="form-control" placeholder="Enter Club description">
         <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Image">Image</label>
-        <input asp-for="Image" class="form-control" placeholder="Enter Image description">
-        <span asp-validation-for="Image" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="clubCategory">ClubCategory</label>
@@ -43,7 +39,12 @@
         <input asp-for="Address.State" class="form-control" placeholder="Enter State">
         <span asp-validation-for="Address.State" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Image">Image</label>
+        <input asp-for="Image" type="file" class="form-control" placeholder="Enter Image description">
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
 
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" style="margin-top: 15px; background-color:tomato" class="btn btn-primary">Submit</button>
 </form>
