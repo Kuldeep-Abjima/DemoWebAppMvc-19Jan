@@ -16,5 +16,9 @@ namespace DemoWebAppMvc.ViewModels
         public IFormFile Image { get; set; }
 
         public ClubCategory clubCategory { get; set; }
+
+
+        public string AppUserId { get; set; }
+
     }
 }

@@ -15,12 +15,14 @@ namespace DemoWebAppMvc.Controllers
         private readonly AppDbContext _context;
         private readonly IRaceRepository _raceRepository;
         private readonly IPhotoServices _configPhoto;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public RaceController(AppDbContext context, IRaceRepository raceRepository, IPhotoServices configPhoto)
+        public RaceController(AppDbContext context, IRaceRepository raceRepository, IPhotoServices configPhoto, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _raceRepository = raceRepository;
             _configPhoto = configPhoto;
+            _httpContextAccessor = httpContextAccessor;
         }
 
      
@@ -38,7 +40,12 @@ namespace DemoWebAppMvc.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            return View();
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserID();
+            var CreateRaceViewModel = new CreateRaceViewModel()
+            {
+                AppUserID = curUser
+            };
+            return View(CreateRaceViewModel);
         }
 
         [HttpPost]
@@ -57,6 +64,7 @@ namespace DemoWebAppMvc.Controllers
                         Street = raceVm.Address.Street,
                         State = raceVm.Address.State,
                     },
+                    AppUserId = raceVm.AppUserID,
                     RaceCategory = raceVm.RaceCategory,
                     Image = ImageUpload.Url.ToString()
 
@@ -142,6 +150,55 @@ namespace DemoWebAppMvc.Controllers
             {
                 return View(racevm);
             }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var RaceDetails = await _raceRepository.GetByIdAsync(id);
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserID();
+            var curUserRole = _httpContextAccessor.HttpContext?.User.GetUserRole();
+
+            if (RaceDetails.AppUserId == curUser || curUserRole == "admin")
+            {
+                return View(RaceDetails);
+               
+            }
+            else if(RaceDetails.AppUserId == null) 
+            {
+                if(curUser != null)
+                {
+                    if(curUserRole == "admin") 
+                    {
+
+                        return View(RaceDetails);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
+                }
+                else
+                {
+                    return View("Error");
+                }
+
+            }
+            else
+            {
+                return View("Error");
+            }
+           
+        }
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteClub(int id)
+        {
+            var raceDetails = await _raceRepository.GetByIdAsync(id);
+            if(raceDetails == null)
+            {
+                return View("Error");
+            }
+             _raceRepository.Delete(raceDetails);
+            return RedirectToAction("Index","Race");
         }
     }
 }

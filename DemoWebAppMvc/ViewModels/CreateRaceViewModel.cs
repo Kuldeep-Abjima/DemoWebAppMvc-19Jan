@@ -16,5 +16,7 @@ namespace DemoWebAppMvc.ViewModels
         public Address Address { get; set; }
 
         public RaceCategory RaceCategory { get; set; }
+
+        public string AppUserID { get; set;}
     }
 }

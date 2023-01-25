@@ -21,7 +21,8 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddTransient<IClubRepository, ClubRepository>();
-builder.Services.AddTransient<IRaceRepository, RaceRepository>(); 
+builder.Services.AddTransient<IRaceRepository, RaceRepository>();
+builder.Services.AddTransient<IDashBoardRepository, DashBoardRepository>();
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddTransient<IPhotoServices, PhotoServices>();
@@ -49,7 +50,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
