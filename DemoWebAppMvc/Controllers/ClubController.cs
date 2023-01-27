@@ -153,11 +153,43 @@ namespace DemoWebAppMvc.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var ClubDetails = await _clubRepository.GetByIdAsync(id);
-            if(ClubDetails == null)
+            if (ClubDetails == null)
             {
                 return View("Error");
             }
-            return View(ClubDetails);
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserID();
+            var curUserRole = _httpContextAccessor.HttpContext?.User.GetUserRole();
+
+            if (ClubDetails.AppUserId == curUser || curUserRole == "admin")
+            {
+                return View(ClubDetails);
+
+            }
+            else if (ClubDetails.AppUserId == null)
+            {
+                if (curUser != null)
+                {
+                    if (curUserRole == "admin")
+                    {
+
+                        return View(ClubDetails);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
+                }
+                else
+                {
+                    return View("Error");
+                }
+
+            }
+            else
+            {
+                return View("Error");
+            }
+            
         }
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteClub(int id)
