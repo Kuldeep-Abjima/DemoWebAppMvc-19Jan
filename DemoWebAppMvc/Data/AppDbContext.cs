@@ -15,5 +15,7 @@ namespace DemoWebAppMvc.Data
         public DbSet<Club> Clubs { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<VehicleModel> Vehicles { get; set; }
     }
 }

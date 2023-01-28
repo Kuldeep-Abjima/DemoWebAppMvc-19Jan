@@ -46,7 +46,8 @@ namespace DemoWebAppMvc.Repository
         }
         public async Task<IEnumerable<Club>> GetClubByCity(string city)
         {
-                return await _context.Clubs.Where(x=>x.Address.City.Contains(city)).ToListAsync();
+               var result = await _context.Clubs.Where(x=>x.Address.City.Contains(city)).ToListAsync();
+               return result;
         }
 
         public bool Save()
