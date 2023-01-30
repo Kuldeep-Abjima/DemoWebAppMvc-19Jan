@@ -86,22 +86,29 @@ namespace DemoWebAppMvc.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var club = await _clubRepository.GetByIdAsync(id);
-            if(club == null)
+            if(club == null || club.AppUser == null)
             {
                 return View("Error");
             }
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserID();
+            var curUserRole = _httpContextAccessor.HttpContext?.User.GetUserRole();
+            if(club.AppUserId == curUser || curUserRole == "admin"){
+                var ClubVm = new EditClubViewModel
+                {
+                    Title = club.Title,
+                    Description = club.Description,
+                    URL = club.Image,
+                    AddressId = club.AddressId,
+                    Address = club.Address,
+                    ClubCategory = club.clubCategory
 
-            var ClubVm = new EditClubViewModel
+                };
+                return View(ClubVm);
+            }
+            else
             {
-                Title = club.Title,
-                Description = club.Description,
-                URL = club.Image,
-                AddressId = club.AddressId,
-                Address = club.Address,
-                ClubCategory = club.clubCategory
-
-            };
-            return View(ClubVm);
+                return View("Error");
+            }
         }
 
         [HttpPost]

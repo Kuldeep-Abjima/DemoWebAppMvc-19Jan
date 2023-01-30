@@ -1,0 +1,36 @@
+﻿@using DemoWebAppMvc.Data.ENum;
+@using DemoWebAppMvc.ViewModels;
+@model CreateVehicleViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<form method="Post" asp-action="Create" enctype="multipart/form-data">
+    <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
+    <div class="form-group">
+        <label asp-for="Name">Name</label>
+        <input asp-for="Name" class="form-control" placeholder="Enter Your Vehicle">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="HorsePower">HorsePower</label>
+        <input asp-for="HorsePower" class="form-control" placeholder="Enter race description">
+        <span asp-validation-for="HorsePower" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="vehicleCategory">vehicleCategory</label>
+        <select asp-for="vehicleCategory" asp-items="@Html.GetEnumSelectList(typeof(VehicleCategory))">
+            <option>----select-----</option>
+        </select>
+        <span asp-validation-for="vehicleCategory" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Image">Image</label>
+        <input asp-for="Image" type="file" class="form-control" placeholder="Enter Image description">
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+
+
+    <button type="submit" style="background-color:blue; margin-top: 15px " class="btn btn-primary">Submit</button>
+</form>

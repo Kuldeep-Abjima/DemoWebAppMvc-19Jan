@@ -34,6 +34,17 @@ namespace DemoWebAppMvc.Repository
                 return vehicles;
         }
 
+        public async Task<VehicleModel> GetVehcilceById(int id)
+        {
+            var vehicles = await _Context.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
+            return vehicles;
+        }
+        public async Task<VehicleModel> GetVehcilceByIdNoTracking(int id)
+        {
+            var vehicles = await _Context.Vehicles.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            return vehicles;
+        }
+
         public bool Save()
         {
             var saved = _Context.SaveChanges();

@@ -92,20 +92,29 @@ namespace DemoWebAppMvc.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var race = await _raceRepository.GetByIdAsync(id);
-            if(race == null)
+            if (race == null || race.AppUser == null)
             {
                 return View("Error");
             }
-            var raceVm = new EditRaceViewModel
+            var curUser = _httpContextAccessor.HttpContext?.User.GetUserID();
+            var curUserRole = _httpContextAccessor.HttpContext?.User.GetUserRole();
+            if (race.AppUserId == curUser || curUserRole == "admin")
             {
-                Title = race.Title,
-                Description = race.Description,
-                Address = race.Address,
-                AddressId = race.AddressId,
-                URL = race.Image,
-                RaceCategory = race.RaceCategory,
-            };
-            return View(raceVm);
+                var raceVm = new EditRaceViewModel
+                {
+                    Title = race.Title,
+                    Description = race.Description,
+                    Address = race.Address,
+                    AddressId = race.AddressId,
+                    URL = race.Image,
+                    RaceCategory = race.RaceCategory,
+                };
+                return View(raceVm);
+            }
+            else
+            {
+                return View("Error");
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Edit(int id, EditRaceViewModel racevm)
